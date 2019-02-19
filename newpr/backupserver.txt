@@ -1,0 +1,111 @@
+<?php  include('server1.php'); ?>
+<?php 
+	if (isset($_GET['edit'])) {
+		$id = $_GET['edit'];
+		$update = true;
+		$record = mysqli_query($db, "SELECT * FROM utilisateur WHERE id=$id");
+
+		if ($record) {
+			$n = mysqli_fetch_array($record);
+			$username = $n['username'];
+            $email = $n['email'];
+            $password = $n['password'];
+		}
+	}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CRUD: CReate, Update, Delete PHP MySQL</title>
+</head>
+<body>
+<?php if (isset($_SESSION['message'])): ?>
+	<div class="msg">
+		<?php 
+			echo $_SESSION['message']; 
+			unset($_SESSION['message']);
+		?>
+	</div>
+<?php endif ?>
+<?php $results = mysqli_query($db, "SELECT * FROM utilisateur"); ?>
+
+<table class='table' style=' margin-top: 800px;position: absolute;margin-left: 300px; width: 600px;'>
+	<thead style=" background-color:#673AB7;color:white;font-size:30px;">
+		<tr>
+			<th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+			<th colspan="2">Action</th>
+		</tr>
+	</thead>
+	
+	<?php while ($row = mysqli_fetch_array($results)) { ?>
+		<tr style="background-color:lightgrey;color:black;font-size:20px;">
+			<td><?php echo $row['username']; ?></td>
+            <td><?php echo $row['email']; ?></td>
+            <td><?php echo $row['password']; ?></td>
+			<td>
+				<a href="index1.php?edit=<?php echo $row['id']; ?>" class="edit_btn"><button class="btn" type="submit" name="edit" style="border:1px solid #673AB7;background: lightgrey;color:#673AB7;" >edit</button></a>
+			</td>
+			<td>
+				<a href="server1.php?del=<?php echo $row['id']; ?>" class="del_btn" ><button class="btn" type="submit" name="delete" style="border:1px solid red; background: lightgrey;color:red;" >delete</button></a></a>
+			</td>
+		</tr>
+	<?php } ?>
+</table>
+	<form style="position: absolute; width: 30%;
+    margin-top: 350px;
+    padding: 20px;
+    border: 1px solid #673AB7;
+    background: white;
+    border-radius: 10px 10px 10px 10px;" method="post" action="server1.php" >
+    <input type="hidden" name="id" value="<?php echo $id; ?>">
+		<div  style="margin: 10px 0px 10px 0px;  display: block;
+    text-align: left;
+    margin: 3px; ">
+            <label>Username</label>
+            <input style="height: 30px;
+    width: 93%;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid gray;"  type="text" name="username" value="<?php echo $username; ?>">
+			
+		</div>
+		<div  style="margin: 10px 0px 10px 0px;  display: block;
+    text-align: left;
+    margin: 3px; " class="input-group">
+            <label>Email</label>
+            <input style="height: 30px;
+    width: 93%;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid gray;" type="text" name="email" value="<?php echo $email; ?>">
+			
+        </div>
+        <div style="margin: 10px 0px 10px 0px;  display: block;
+    text-align: left;
+    margin: 3px; " class="input-group">
+            <label>Password</label>
+            <input style="height: 30px;
+    width: 93%;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid gray;" type="password" name="password" value="<?php echo $password; ?>">			
+		</div>
+		<div s class="input-group">
+			<?php if ($update == true): ?>
+	<button class="btn" type="submit" name="update"  style=" padding: 10px;
+    font-size: 15px;
+    color: white;
+    background: dodgerblue;
+    border:none;
+    border-radius: 5px;" >update</button>
+	
+<?php endif ?>
+		</div>
+	</form>
+</body>
+</html>
